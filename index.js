@@ -4,7 +4,7 @@ const init = () =>{
         return res.json()
     })
     .then(function(object){
-        object.forEach(function({id,title,poster, description, capacity, tickets_sold}){
+        object.forEach(function({id,title,poster, description, capacity, tickets_sold}){                //For each of the movie objects in the object array:
             let movieListDiv = document.getElementById('movieList')                                     //Creates a div for the movie object
             
 
@@ -28,7 +28,9 @@ const init = () =>{
             //let buyTicket = document.createElement('button')
             //buyTicket.innerText= "Buy Ticket"
 
-            movieItem.dataset.id = id
+            movieItem.dataset.id = id                                                                   //Sets the id of each of the new created elements to match the id of each movie
+            moviePoster.dataset.id = id
+            movieDescription.dataset.id = id
 
             movieItem.append( moviePoster, movieTitle,movieDescription, movieSeats)                     //Appends all the newly created elements to the 
 
@@ -42,26 +44,37 @@ const init = () =>{
     let movieListDiv = document.getElementById('movieList')
 
     let selectedMovieURL = `http://localhost:3000/films/${1}`                                           //Sets the default movie to be shown in the firstMovieDisplay to "id:1"
+    firstMovieDisplay()                                                                                 //Displays the default movie in the #firstMovieDisplay div
 
     movieListDiv.addEventListener('click', (event)=>{
-        const movieId = event.target.dataset.id
-        alert (movieId)
-        selectedMovieURL = `http://localhost:3000/films/${movieId}`
-        clearFirstMovieDisplay() 
-        firstMovieDisplay()
+        const movieId = event.target.dataset.id                                                         //Gets the id of the element selected (See lines 31-33)
+        //alert (movieId)
+        selectedMovieURL = `http://localhost:3000/films/${movieId}`                                     //Sets url to match the id of the selected element                                   
+        clearFirstMovieDisplay()                                                                        //Clears the firstMovieDisplay of its default values and adds that of the selected movie (See line 49 and)
+        firstMovieDisplay()                                                                             
     })
 
-    firstMovieDisplay()
+    
 
     
+/**************************************************************** 
+    Function Clears the firstMovieDisplay of its default values
+*****************************************************************/
 
     function clearFirstMovieDisplay(){
        let firstMovieDisplay =document.getElementById('firstMovieDisplay')
        firstMovieDisplay.innerHTML=''
     }
 
+
+
+
+/**************************************************************** 
+    Function That Prints the selected move on to the #firstMovieDisplay div
+*****************************************************************/
+
     function firstMovieDisplay(){
-        fetch(selectedMovieURL)
+        fetch(selectedMovieURL)                                                                         //Gets the selected url (See lines 46 and 51)
         .then(function(res){
             return res.json()
         })
@@ -101,6 +114,7 @@ const init = () =>{
             //alert(object.id)
             //firstMovieDisplay.append(moviePoster, movieTitle, movieRunTime, movieShowtime, movieSeats,buyTicket)
         
+            //Reduces the number of available tickets
             buyTicket.addEventListener('click', (event)=>{
                 alert(`ticket for ${object.title} bought`)
                 fetch(selectedMovieURL)
